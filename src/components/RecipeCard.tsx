@@ -49,8 +49,7 @@ const RecipeCard = ({ recipe }: RecipeCardProps) => {
 
   return (
     <div 
-      className="group bg-gradient-card rounded-2xl shadow-custom-md hover:shadow-custom-lg transition-transform transition-shadow duration-300 overflow-hidden border border-border hover:border-primary/20 cursor-pointer will-change-transform will-change-shadow"
-      onClick={() => navigate(`/recipe/${recipe.id}`)}
+      className="group bg-gradient-card rounded-2xl shadow-custom-md hover:shadow-custom-lg transition-transform transition-shadow duration-300 overflow-hidden border border-border hover:border-primary/20 will-change-transform will-change-shadow"
     >
       {/* Recipe Image */}
       <div className="relative h-48 overflow-hidden">
