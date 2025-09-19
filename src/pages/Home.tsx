@@ -14,7 +14,7 @@ const Home = () => {
     {
       id: '1',
       name: 'Arjun Mehta',
-      image: '/BUTTER_CHICKEN.jpg', // Using Butter Chicken for Arjun Mehta
+      image: '/placeholder.svg', // Using Butter Chicken for Arjun Mehta
       cuisines: ['North Indian', 'Punjabi', 'Mughlai'],
       rating: 4.8,
       reviews: 127,
@@ -29,7 +29,7 @@ const Home = () => {
     {
       id: '2',
       name: 'Priya Sharma',
-      image: '/DOSA.jpg', // Using Dosa for Priya Sharma
+      image: '/placeholder.svg', // Using Dosa for Priya Sharma
       cuisines: ['South Indian', 'Tamil', 'Kerala'],
       rating: 4.9,
       reviews: 203,
@@ -44,7 +44,7 @@ const Home = () => {
     {
       id: '3',
       name: 'Ravi Gupta',
-      image: '/DHOKLA.jpg', // Using Dhokla for Ravi Gupta
+      image: '/placeholder.svg', // Using Dhokla for Ravi Gupta
       cuisines: ['Gujarati', 'Rajasthani', 'Street Food'],
       rating: 4.7,
       reviews: 89,
