@@ -1,0 +1,68 @@
+-- WARNING: This schema is for context only and is not meant to be run.
+-- Table order and constraints may not be valid for execution.
+
+CREATE TABLE public.bookings (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  user_id uuid,
+  chef_id uuid,
+  plan_id uuid,
+  booking_date timestamp with time zone NOT NULL,
+  status text DEFAULT 'pending'::text CHECK (status = ANY (ARRAY['pending'::text, 'confirmed'::text, 'completed'::text, 'cancelled'::text])),
+  total_price numeric,
+  created_at timestamp with time zone DEFAULT now(),
+  CONSTRAINT bookings_pkey PRIMARY KEY (id),
+  CONSTRAINT bookings_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id),
+  CONSTRAINT bookings_chef_id_fkey FOREIGN KEY (chef_id) REFERENCES public.chefs(id),
+  CONSTRAINT bookings_plan_id_fkey FOREIGN KEY (plan_id) REFERENCES public.pricing_plans(id)
+);
+CREATE TABLE public.chefs (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  name text NOT NULL,
+  image_url text,
+  rating numeric,
+  reviews_count integer DEFAULT 0,
+  hourly_price numeric,
+  tagline text,
+  specialties ARRAY,
+  cuisines ARRAY,
+  created_at timestamp with time zone DEFAULT now(),
+  CONSTRAINT chefs_pkey PRIMARY KEY (id)
+);
+CREATE TABLE public.pricing_plans (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  name text NOT NULL,
+  price numeric NOT NULL,
+  description text,
+  features ARRAY,
+  cuisines ARRAY,
+  is_popular boolean DEFAULT false,
+  icon_name text,
+  gradient text,
+  created_at timestamp with time zone DEFAULT now(),
+  CONSTRAINT pricing_plans_pkey PRIMARY KEY (id)
+);
+CREATE TABLE public.recipes (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  name text NOT NULL,
+  image_url text,
+  cuisine text,
+  difficulty text CHECK (difficulty = ANY (ARRAY['Easy'::text, 'Medium'::text, 'Hard'::text])),
+  cook_time text,
+  serves integer,
+  rating numeric,
+  description text,
+  spice_level text CHECK (spice_level = ANY (ARRAY['Mild'::text, 'Medium'::text, 'Spicy'::text])),
+  ingredients ARRAY,
+  chef_id uuid,
+  created_at timestamp with time zone DEFAULT now(),
+  instructions ARRAY,
+  CONSTRAINT recipes_pkey PRIMARY KEY (id),
+  CONSTRAINT recipes_chef_id_fkey FOREIGN KEY (chef_id) REFERENCES public.chefs(id)
+);
+CREATE TABLE public.users (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  email text NOT NULL UNIQUE,
+  full_name text,
+  created_at timestamp with time zone DEFAULT now(),
+  CONSTRAINT users_pkey PRIMARY KEY (id)
+);

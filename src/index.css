@@ -1,0 +1,150 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ChefBook Design System - Inspired by Indian flavors and modern elegance */
+
+@layer base {
+  :root {
+    /* Core Colors - Warm & Inviting */
+    --background: 35 10% 98%;
+    --foreground: 25 25% 15%;
+
+    /* Card System */
+    --card: 0 0% 100%;
+    --card-foreground: 25 25% 15%;
+    --card-hover: 35 20% 96%;
+
+    /* Primary Brand - Saffron Inspired */
+    --primary: 25 95% 53%;
+    --primary-foreground: 0 0% 100%;
+    --primary-muted: 25 85% 60%;
+    --primary-light: 25 90% 85%;
+
+    /* Secondary - Turmeric Gold */
+    --secondary: 45 85% 55%;
+    --secondary-foreground: 25 25% 15%;
+    --secondary-muted: 45 75% 70%;
+
+    /* Accent - Spice Red */
+    --accent: 15 85% 60%;
+    --accent-foreground: 0 0% 100%;
+    --accent-muted: 15 70% 75%;
+
+    /* Success - Fresh Mint */
+    --success: 140 60% 50%;
+    --success-foreground: 0 0% 100%;
+
+    /* Neutral Palette */
+    --muted: 35 15% 92%;
+    --muted-foreground: 25 15% 45%;
+    --border: 35 20% 88%;
+    --input: 35 20% 90%;
+    --ring: 25 95% 53%;
+
+    /* Interactive States */
+    --hover: 35 25% 94%;
+    --focus: 25 95% 53%;
+
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(25 95% 53%) 0%, hsl(45 85% 55%) 100%);
+    --gradient-secondary: linear-gradient(135deg, hsl(45 85% 55%) 0%, hsl(35 90% 65%) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(25 95% 53% / 0.7) 0%, hsl(15 85% 60% / 0.7) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(35 15% 97%) 100%);
+
+    /* Shadows - Warm & Soft */
+    --shadow-sm: 0 1px 3px hsl(25 25% 15% / 0.1);
+    --shadow-md: 0 4px 6px -1px hsl(25 25% 15% / 0.1), 0 2px 4px -1px hsl(25 25% 15% / 0.06);
+    --shadow-lg: 0 10px 15px -3px hsl(25 25% 15% / 0.1), 0 4px 6px -2px hsl(25 25% 15% / 0.05);
+    --shadow-xl: 0 20px 25px -5px hsl(25 25% 15% / 0.1), 0 10px 10px -5px hsl(25 25% 15% / 0.04);
+    --shadow-glow: 0 0 30px hsl(25 95% 53% / 0.3);
+
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    /* Dark Mode - Rich & Elegant */
+    --background: 25 25% 8%;
+    --foreground: 35 10% 95%;
+
+    --card: 25 20% 12%;
+    --card-foreground: 35 10% 95%;
+    --card-hover: 25 25% 16%;
+
+    --primary: 25 95% 58%;
+    --primary-foreground: 25 25% 8%;
+    --primary-muted: 25 85% 45%;
+    --primary-light: 25 50% 25%;
+
+    --secondary: 45 85% 60%;
+    --secondary-foreground: 25 25% 8%;
+    --secondary-muted: 45 60% 40%;
+
+    --accent: 15 85% 65%;
+    --accent-foreground: 25 25% 8%;
+    --accent-muted: 15 60% 45%;
+
+    --success: 140 60% 55%;
+    --success-foreground: 25 25% 8%;
+
+    --muted: 25 15% 18%;
+    --muted-foreground: 35 10% 65%;
+    --border: 25 20% 20%;
+    --input: 25 20% 16%;
+    --ring: 25 95% 58%;
+
+    --hover: 25 25% 20%;
+    --focus: 25 95% 58%;
+
+    --gradient-primary: linear-gradient(135deg, hsl(25 95% 58%) 0%, hsl(45 85% 60%) 100%);
+    --gradient-secondary: linear-gradient(135deg, hsl(45 85% 60%) 0%, hsl(35 90% 65%) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(25 95% 58% / 0.95) 0%, hsl(15 85% 65% / 0.95) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(25 20% 12%) 0%, hsl(25 15% 15%) 100%);
+
+    --shadow-sm: 0 1px 3px hsl(0 0% 0% / 0.3);
+    --shadow-md: 0 4px 6px -1px hsl(0 0% 0% / 0.3), 0 2px 4px -1px hsl(0 0% 0% / 0.2);
+    --shadow-lg: 0 10px 15px -3px hsl(0 0% 0% / 0.3), 0 4px 6px -2px hsl(0 0% 0% / 0.2);
+    --shadow-xl: 0 20px 25px -5px hsl(0 0% 0% / 0.4), 0 10px 10px -5px hsl(0 0% 0% / 0.3);
+    --shadow-glow: 0 0 40px hsl(25 95% 58% / 0.4);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+}
+
+/* 3D Flip Animation Utilities */
+@layer utilities {
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+  
+  .transform-style-preserve-3d {
+    transform-style: preserve-3d;
+  }
+  
+  .backface-hidden {
+    backface-visibility: hidden;
+  }
+  
+  .rotate-y-180 {
+    transform: rotateY(180deg);
+  }
+  
+  /* Text line clamp utilities */
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
