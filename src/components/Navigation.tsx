@@ -5,8 +5,10 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import ThemeToggle from '@/components/ThemeToggle';
 import { supabase } from '@/lib/supabase';
+import { useCart } from '@/context/CartContext';
 
 const Navigation = () => {
+  const { cartCount } = useCart();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [session, setSession] = useState<any>(null);
   const navigate = useNavigate();
@@ -84,9 +86,19 @@ const Navigation = () => {
           {/* Right Side Actions */}
           <div className="flex items-center space-x-4">
             <ThemeToggle />
-            <Button size="sm" variant="ghost" className="hidden md:flex">
-              <ShoppingBag className="h-4 w-4 mr-2" />
-              Cart
+            <Button 
+              size="sm" 
+              variant="ghost" 
+              className="hidden md:flex relative group"
+              onClick={() => navigate('/cart')}
+            >
+              <ShoppingBag className="h-4 w-4 mr-2 group-hover:text-primary transition-colors" />
+              <span>Cart</span>
+              {cartCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-gradient-primary text-white text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center animate-in zoom-in">
+                  {cartCount}
+                </span>
+              )}
             </Button>
             {session ? (
               <Button size="sm" variant="ghost" onClick={handleLogout} className="hover:text-accent transition-colors">

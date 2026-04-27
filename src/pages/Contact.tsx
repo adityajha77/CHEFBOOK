@@ -1,10 +1,12 @@
 import { useState } from 'react';
-import { Mail, Phone, MapPin, Clock, Send, MessageCircle, Users, Award } from 'lucide-react';
+import { Mail, Phone, MapPin, Clock, Send, MessageCircle, Users, Award, Loader2 } from 'lucide-react';
 import Navigation from '@/components/Navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Card } from '@/components/ui/card';
+import emailjs from '@emailjs/browser';
+import { toast } from 'sonner';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -15,10 +17,53 @@ const Contact = () => {
     message: ''
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission here
-    console.log('Form submitted:', formData);
+    setIsSubmitting(true);
+
+    const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+    const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+    const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+
+    if (!serviceId || !templateId || !publicKey) {
+      toast.error('Email service is not configured correctly.');
+      setIsSubmitting(false);
+      return;
+    }
+
+    try {
+      const response = await emailjs.send(
+        serviceId,
+        templateId,
+        {
+          from_name: formData.name,
+          from_email: formData.email,
+          phone: formData.phone,
+          subject: formData.subject,
+          message: formData.message,
+          to_name: 'ChefBook Team',
+        },
+        publicKey
+      );
+
+      if (response.status === 200) {
+        toast.success('Thank you! Your message has been sent successfully.');
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          subject: '',
+          message: ''
+        });
+      }
+    } catch (error) {
+      console.error('EmailJS Error:', error);
+      toast.error('Failed to send message. Please try again later.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -170,9 +215,19 @@ const Contact = () => {
                   type="submit"
                   className="w-full h-12 bg-gradient-primary hover:shadow-glow transition-all duration-300 font-semibold"
                   size="lg"
+                  disabled={isSubmitting}
                 >
-                  <Send className="h-5 w-5 mr-2" />
-                  Send Message
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="h-5 w-5 mr-2 animate-spin" />
+                      Sending...
+                    </>
+                  ) : (
+                    <>
+                      <Send className="h-5 w-5 mr-2" />
+                      Send Message
+                    </>
+                  )}
                 </Button>
               </form>
             </div>

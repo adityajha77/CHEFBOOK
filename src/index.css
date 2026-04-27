@@ -12,6 +12,9 @@
     --background: 35 10% 98%;
     --foreground: 25 25% 15%;
 
+    --popover: 0 0% 100%;
+    --popover-foreground: 25 25% 15%;
+
     /* Card System */
     --card: 0 0% 100%;
     --card-foreground: 25 25% 15%;
@@ -68,6 +71,9 @@
     /* Dark Mode - Rich & Elegant */
     --background: 25 25% 8%;
     --foreground: 35 10% 95%;
+
+    --popover: 25 25% 8%;
+    --popover-foreground: 35 10% 95%;
 
     --card: 25 20% 12%;
     --card-foreground: 35 10% 95%;

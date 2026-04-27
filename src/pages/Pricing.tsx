@@ -1,13 +1,22 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { Check, Star, Crown, Sparkles, Loader2, Calendar } from 'lucide-react';
+import { Check, Star, Crown, Sparkles, Loader2, Calendar as CalendarIcon, MapPin, Phone, User, Mail, MessageSquare, ShoppingBag, ChefHat } from 'lucide-react';
 import Navigation from '@/components/Navigation';
 import { supabase } from '@/lib/supabase';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
+import { useCart } from '@/context/CartContext';
+import BookingDialog from '@/components/BookingDialog';
 
 const Pricing = () => {
+  const { addToCart } = useCart();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -18,6 +27,10 @@ const Pricing = () => {
   const [loading, setLoading] = useState(true);
   const [bookingLoading, setBookingLoading] = useState<string | null>(null);
   const [selectedChef, setSelectedChef] = useState<any>(null);
+
+  // Booking States
+  const [isBookingDialogOpen, setIsBookingDialogOpen] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState<any>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -56,48 +69,21 @@ const Pricing = () => {
     fetchData();
   }, [chefId]);
 
-  const handleBooking = async (plan: any) => {
-    setBookingLoading(plan.id);
-    try {
-      const { data: { session } } = await supabase.auth.getSession();
-      
-      if (!session) {
-        toast({
-          title: "Login Required",
-          description: "Please sign in to book a chef.",
-          variant: "destructive",
-        });
-        navigate('/auth');
-        return;
-      }
-
-      const { data, error } = await supabase.from('bookings').insert([
-        {
-          user_id: session.user.id,
-          chef_id: chefId || null, // Allow no chef for now if direct visit
-          plan_id: plan.id,
-          total_price: plan.price,
-          status: 'pending',
-          booking_date: new Date(Date.now() + 86400000).toISOString(), // Tomorrow
-        }
-      ]);
-
-      if (error) throw error;
-
+  const handleBookingClick = async (plan: any) => {
+    const { data: { session } } = await supabase.auth.getSession();
+    
+    if (!session) {
       toast({
-        title: "Booking Successful!",
-        description: `Your ${plan.name} has been scheduled.`,
-      });
-      navigate('/');
-    } catch (err: any) {
-      toast({
-        title: "Booking Failed",
-        description: err.message,
+        title: "Login Required",
+        description: "Please sign in to book a chef.",
         variant: "destructive",
       });
-    } finally {
-      setBookingLoading(null);
+      navigate('/auth');
+      return;
     }
+    
+    setSelectedPlan(plan);
+    setIsBookingDialogOpen(true);
   };
 
   return (
@@ -116,11 +102,21 @@ const Pricing = () => {
               : 'Choose the perfect chef experience for your home dining needs'
             }
           </p>
+          
+          {!chefId && (
+            <div className="mt-8 flex justify-center">
+              <Badge variant="outline" className="bg-white/10 text-white border-white/20 px-6 py-3 text-base backdrop-blur-md animate-in fade-in slide-in-from-top-4 duration-700">
+                <ChefHat className="h-5 w-5 mr-3 text-secondary" />
+                No chef selected? Don't worry, you can choose your preference during booking!
+              </Badge>
+            </div>
+          )}
+
           {selectedChef && (
             <div className="mt-8 flex justify-center">
               <Badge className="bg-white/20 text-white px-4 py-2 text-lg backdrop-blur-md border-white/30">
-                <Calendar className="h-5 w-5 mr-2" />
-                Booking for Tomorrow
+                <CalendarIcon className="h-5 w-5 mr-2" />
+                Book Your Experience
               </Badge>
             </div>
           )}
@@ -191,22 +187,45 @@ const Pricing = () => {
                     </div>
                   </div>
 
-                  <Button 
-                    className={`w-full transition-all duration-300 ${
-                      plan.popular 
-                        ? 'bg-gradient-primary hover:shadow-glow' 
-                        : 'bg-primary hover:bg-primary/90'
-                    } ${hoveredPlan === plan.id ? 'scale-105' : ''}`}
-                    size="lg"
-                    onClick={() => handleBooking(plan)}
-                    disabled={bookingLoading === plan.id}
-                  >
-                    {bookingLoading === plan.id ? (
-                      <Loader2 className="h-5 w-5 animate-spin" />
-                    ) : (
-                      `Book ${plan.name}`
-                    )}
-                  </Button>
+                  <div className="flex flex-col gap-3">
+                    <Button 
+                      className={`w-full transition-all duration-300 ${
+                        plan.popular 
+                          ? 'bg-gradient-primary hover:shadow-glow' 
+                          : 'bg-primary hover:bg-primary/90'
+                      } ${hoveredPlan === plan.id ? 'scale-105' : ''}`}
+                      size="lg"
+                      onClick={() => handleBookingClick(plan)}
+                      disabled={bookingLoading === plan.id}
+                    >
+                      {bookingLoading === plan.id ? (
+                        <Loader2 className="h-5 w-5 animate-spin" />
+                      ) : (
+                        `Book ${plan.name}`
+                      )}
+                    </Button>
+                    
+                    <Button 
+                      variant="outline"
+                      className="w-full border-primary/20 hover:bg-primary/5 text-primary"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        addToCart({
+                          id: plan.id,
+                          name: plan.name,
+                          price: plan.price,
+                          description: plan.description,
+                          chefId: chefId,
+                          chefName: selectedChef?.name || null,
+                          gradient: plan.gradient,
+                          icon_name: plan.icon_name
+                        });
+                      }}
+                    >
+                      <ShoppingBag className="h-4 w-4 mr-2" />
+                      Add to Cart
+                    </Button>
+                  </div>
                 </div>
               ))
             )}
@@ -250,6 +269,14 @@ const Pricing = () => {
           </div>
         </div>
       </section>
+
+      {/* Booking Dialog */}
+      <BookingDialog 
+        isOpen={isBookingDialogOpen} 
+        onOpenChange={setIsBookingDialogOpen} 
+        selectedPlan={selectedPlan} 
+        chefId={chefId} 
+      />
     </div>
   );
 };

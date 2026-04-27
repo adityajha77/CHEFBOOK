@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "next-themes";
+import { CartProvider } from "./context/CartContext";
 import Index from "./pages/Index";
 import Pricing from "./pages/Pricing";
 import Recipes from "./pages/Recipes";
@@ -12,6 +13,8 @@ import NotFound from "./pages/NotFound";
 import ComingSoon from "./pages/ComingSoon"; // Import the new ComingSoon page
 import Auth from "./pages/Auth";
 import RecipeDetail from "./pages/RecipeDetail";
+import Success from "./pages/Success";
+import Cart from "./pages/Cart";
 
 const queryClient = new QueryClient();
 
@@ -19,9 +22,10 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
       <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
+        <CartProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/pricing" element={<Pricing />} />
@@ -30,9 +34,12 @@ const App = () => (
             <Route path="/contact" element={<Contact />} />
             <Route path="/coming-soon" element={<ComingSoon />} />
             <Route path="/auth" element={<Auth />} />
+            <Route path="/success" element={<Success />} />
+            <Route path="/cart" element={<Cart />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
+        </CartProvider>
       </TooltipProvider>
     </ThemeProvider>
   </QueryClientProvider>

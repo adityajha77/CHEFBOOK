@@ -3,8 +3,10 @@ import { Search, MapPin, Star, Users, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useTheme } from 'next-themes';
+import { useNavigate } from 'react-router-dom';
 
 const HeroSection = () => {
+  const navigate = useNavigate();
   const [animatedText, setAnimatedText] = useState('');
   const fullText = 'Book Professional Chefs';
   
@@ -89,7 +91,10 @@ const HeroSection = () => {
                     />
                   </div>
                 </div>
-                <Button className="h-12 px-8 bg-gradient-primary hover:shadow-glow transition-all duration-300 font-semibold">
+                <Button 
+                  className="h-12 px-8 bg-gradient-primary hover:shadow-glow transition-all duration-300 font-semibold"
+                  onClick={() => navigate('/coming-soon')}
+                >
                   Find Chefs
                 </Button>
               </div>
@@ -115,6 +120,7 @@ const HeroSection = () => {
             <Button 
               size="lg" 
               className="bg-secondary hover:bg-secondary-muted text-secondary-foreground font-semibold px-8 hover:shadow-glow transition-all duration-300"
+              onClick={() => navigate('/coming-soon')}
             >
               Explore Indian Cuisine
             </Button>
@@ -122,6 +128,7 @@ const HeroSection = () => {
               size="lg" 
               variant="outline" 
               className={`font-semibold px-8 backdrop-blur-sm ${theme === 'dark' ? 'border-white/30 text-white hover:bg-white hover:text-primary' : 'border-primary/30 text-primary hover:bg-primary hover:text-primary-foreground'}`}
+              onClick={() => navigate('/recipes')}
             >
               View Recipes
             </Button>

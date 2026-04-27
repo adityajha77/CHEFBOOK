@@ -1,6 +1,4 @@
-# -----------------------------
 # Logs
-# -----------------------------
 logs
 *.log
 npm-debug.log*
@@ -9,59 +7,65 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-# -----------------------------
 # Dependencies
-# -----------------------------
 node_modules/
+.pnpm-store/
 
-# -----------------------------
 # Build outputs
-# -----------------------------
 dist/
 dist-ssr/
 build/
 out/
+.next/
+.vercel/
 
-# -----------------------------
-# Environment variables
-# -----------------------------
+# Environment variables (CRITICAL)
 .env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 .env.*
-*.local
+!.env.example
 
-# -----------------------------
 # OS files
-# -----------------------------
 .DS_Store
 Thumbs.db
+*.icloud
 
-# -----------------------------
 # Editor / IDE
-# -----------------------------
 .vscode/*
 !.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/launch.json
 .idea/
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
+*.patch
+*.diff
 
-# -----------------------------
+# Testing
+coverage/
+.nyc_output/
+
 # Cache / temp files
-# -----------------------------
 .cache/
+.parcel-cache/
+.eslintcache
+.stylelintcache
 .temp/
 .tmp/
 
-# -----------------------------
-# Testing
-# -----------------------------
-coverage/
+# Supabase
+.supabase/
 
-# -----------------------------
 # Misc
-# -----------------------------
 *.pid
 *.seed
 *.pid.lock
+.pnpm-debug.log*
+.npmrc
+.yarnrc
